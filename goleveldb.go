@@ -172,7 +172,12 @@ func (db *GoLevelDB) ForceCompact(start, limit []byte) error {
 
 // NewBatch implements DB.
 func (db *GoLevelDB) NewBatch() Batch {
-	return newGoLevelDBBatch(db)
+	return newGoLevelDBBatchWithSize(db, 0)
+}
+
+// NewBatchWithSize implements DB.
+func (db *GoLevelDB) NewBatchWithSize(size int) Batch {
+	return newGoLevelDBBatchWithSize(db, size)
 }
 
 // Iterator implements DB.

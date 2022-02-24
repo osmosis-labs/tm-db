@@ -17,10 +17,10 @@ type batch struct {
 
 var _ db.Batch = (*batch)(nil)
 
-func newBatch(rdb *RemoteDB) *batch {
+func newBatchWithSize(rdb *RemoteDB, size int) *batch {
 	return &batch{
 		db:  rdb,
-		ops: []*protodb.Operation{},
+		ops: make([]*protodb.Operation, 0, size),
 	}
 }
 

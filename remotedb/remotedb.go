@@ -97,7 +97,11 @@ func (rd *RemoteDB) ReverseIterator(start, end []byte) (db.Iterator, error) {
 }
 
 func (rd *RemoteDB) NewBatch() db.Batch {
-	return newBatch(rd)
+	return newBatchWithSize(rd, 0)
+}
+
+func (rd *RemoteDB) NewBatchWithSize(size int) db.Batch {
+	return newBatchWithSize(rd, size)
 }
 
 // TODO: Implement Print when db.DB implements a method

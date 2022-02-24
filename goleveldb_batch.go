@@ -12,10 +12,10 @@ type goLevelDBBatch struct {
 
 var _ Batch = (*goLevelDBBatch)(nil)
 
-func newGoLevelDBBatch(db *GoLevelDB) *goLevelDBBatch {
+func newGoLevelDBBatchWithSize(db *GoLevelDB, size int) *goLevelDBBatch {
 	return &goLevelDBBatch{
 		db:    db,
-		batch: new(leveldb.Batch),
+		batch: leveldb.MakeBatch(size),
 	}
 }
 
