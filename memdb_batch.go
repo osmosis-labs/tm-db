@@ -25,10 +25,10 @@ type memDBBatch struct {
 var _ Batch = (*memDBBatch)(nil)
 
 // newMemDBBatchWithSize creates a new memDBBatch
-func newMemDBBatchWithSize(db *MemDB, size int) *memDBBatch {
+func newMemDBBatchWithSize(db *MemDB, _ int) *memDBBatch {
 	return &memDBBatch{
 		db:  db,
-		ops: make([]operation, 0, size),
+		ops: make([]operation, 0),
 	}
 }
 
