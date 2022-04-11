@@ -57,6 +57,7 @@ func NewPebbleDB(name string, dir string) (DB, error) {
 	opts.EnsureDefaults()
 
 	p, err := pebble.Open(dir, opts)
+	fmt.Println("Made Database", dir, opts)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,6 +72,7 @@ func (db *PebbleDB) Get(key []byte) ([]byte, error) {
 		return nil, errKeyEmpty
 	}
 	res, closer, err := db.db.Get(key)
+	fmt.Println("Get", key)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -83,6 +85,7 @@ func (db *PebbleDB) Get(key []byte) ([]byte, error) {
 // Has implements DB.
 func (db *PebbleDB) Has(key []byte) (bool, error) {
 	bytes, err := db.Get(key)
+	fmt.Println("Has", key)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -98,6 +101,7 @@ func (db *PebbleDB) Set(key []byte, value []byte) error {
 		return errValueNil
 	}
 	err := db.db.Set(key, value, pebble.NoSync)
+	fmt.Println("set", key, value)
 	if err != nil {
 		return err
 	}
@@ -170,6 +174,7 @@ func (db *PebbleDB) Print() error {
 
 // Stats implements DB.
 func (db *PebbleDB) Stats() map[string]string {
+
 	/*
 		keys := []string{"rocksdb.stats"}
 		stats := make(map[string]string, len(keys))

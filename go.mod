@@ -3,13 +3,13 @@ module github.com/tendermint/tm-db
 go 1.17
 
 require (
-	github.com/cockroachdb/pebble v0.0.0-20220331191355-c6ff69042f1c
-	github.com/cosmos/gorocksdb v1.2.0
+	github.com/cockroachdb/pebble v0.0.0-20220411141034-e49279681bc5
 	github.com/dgraph-io/badger/v2 v2.2007.2
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/btree v1.0.0
 	github.com/jmhodges/levigo v1.0.0
+	github.com/linxGnu/grocksdb v1.7.1-0.20220327020612-ee0c6690507f
 	github.com/stretchr/testify v1.7.1
 	github.com/syndtr/goleveldb v1.0.1-0.20200815110645-5c35d600f0ca
 	go.etcd.io/bbolt v1.3.6
@@ -40,7 +40,7 @@ require (
 	golang.org/x/text v0.3.3 // indirect
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect
 	google.golang.org/protobuf v1.26.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
 
 // Breaking changes were released with the wrong tag (use v0.6.6 or later).

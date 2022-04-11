@@ -5,14 +5,14 @@ package db
 import "github.com/cockroachdb/pebble"
 
 type pebbleDBBatch struct {
-	batch *pebble.Batch
+	batch pebble.Batch
 }
 
 var _ Batch = (*pebbleDBBatch)(nil)
 
 func newPebbleDBBatch(db *PebbleDB) *pebbleDBBatch {
 	return &pebbleDBBatch{
-		batch: db.db.NewBatch(),
+		batch: *db.db.NewBatch(),
 	}
 }
 
@@ -50,9 +50,6 @@ func (b *pebbleDBBatch) Write() error {
 
 // WriteSync implements Batch.
 func (b *pebbleDBBatch) WriteSync() error {
-	if b.batch == nil {
-		return errBatchClosed
-	}
 	err := b.batch.Commit(pebble.Sync)
 	if err != nil {
 		return err
