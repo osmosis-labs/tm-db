@@ -24,45 +24,16 @@ type PebbleDB struct {
 var _ DB = (*PebbleDB)(nil)
 
 func NewPebbleDB(name string, dir string) (DB, error) {
-	//	cache := pebble.NewCache(1024 * 1024 * 32)
-	//	defer cache.Unref()
-	opts := &pebble.Options{
-		//		Cache:                       cache,
-		//		FormatMajorVersion:          pebble.FormatNewest,
-		//		L0CompactionThreshold:       2,
-		//		L0StopWritesThreshold:       1000,
-		//		LBaseMaxBytes:               64 << 20, // 64 MB
-		//		Levels:                      make([]pebble.LevelOptions, 7),
-		//		MaxConcurrentCompactions:    3,
-		//		MaxOpenFiles:                1024,
-		//		MemTableSize:                64 << 20,
-		//		MemTableStopWritesThreshold: 4,
+	db, err := pebble.Open("demo", &pebble.Options{})
+	if err != nil {
+		log.Fatal(err)
 	}
-	/*
-		for i := 0; i < len(opts.Levels); i++ {
-			l := &opts.Levels[i]
-			l.BlockSize = 32 << 10       // 32 KB
-			l.IndexBlockSize = 256 << 10 // 256 KB
-			l.FilterPolicy = bloom.FilterPolicy(10)
-			l.FilterType = pebble.TableFilter
-			if i > 0 {
-				l.TargetFileSize = opts.Levels[i-1].TargetFileSize * 2
-			}
-			l.EnsureDefaults()
-		}
-	*/
-	//	opts.Levels[6].FilterPolicy = nil
-	//	opts.FlushSplitBytes = opts.Levels[0].TargetFileSize
-
-	opts.EnsureDefaults()
-
-	p, err := pebble.Open(dir, opts)
-	fmt.Println("Made Database", dir, opts)
+	fmt.Println("Made Database", dir)
 	if err != nil {
 		log.Fatal(err)
 	}
 	return &PebbleDB{
-		db: p,
+		db: db,
 	}, err
 }
 
@@ -75,9 +46,11 @@ func (db *PebbleDB) Get(key []byte) ([]byte, error) {
 	fmt.Println("Get", key)
 	if err != nil {
 		log.Fatal(err)
+		return nil, nil
 	}
 	if err = closer.Close(); err != nil {
 		log.Fatal(err)
+		return nil, nil
 	}
 	return res, nil
 }
@@ -117,6 +90,7 @@ func (db *PebbleDB) SetSync(key []byte, value []byte) error {
 		return errValueNil
 	}
 	err := db.db.Set(key, value, pebble.Sync)
+	fmt.Println("set sync", key, value)
 	if err != nil {
 		return err
 	}
