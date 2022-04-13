@@ -156,7 +156,9 @@ func (db *PebbleDB) Stats() map[string]string {
 			stats[key] = db.(key)
 		}
 	*/
-	return nil
+	stats := make(map[string]string, 1)
+        stats["Metrics"] = fmt.Sprint(db.db.Metrics())
+        return stats
 }
 
 // NewBatch implements DB.
