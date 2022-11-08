@@ -26,7 +26,7 @@ jobs:
 
     strategy:
       matrix:
-        database: [pebbledb, goleveldb]
+        database: [pebbledb, goleveldb, mdbx]
 
     steps:
       - run: git config --global --add safe.directory /__w/tendermint/tm-db
