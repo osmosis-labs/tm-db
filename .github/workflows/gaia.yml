@@ -21,7 +21,7 @@ jobs:
       GAIAD_STATESYNC_ENABLE: true
       GAIAD_P2P_MAX_NUM_OUTBOUND_PEERS: 200
       GAIAD_P2P_SEEDS: "ade4d8bc8cbe014af6ebdf3cb7b1e9ad36f412c0@seeds.polkachu.com:14956"
-      GAIAD_STATESYNC_RPC_SERVERS: "https://rpc-cosmoshub.blockapsis.com:443,https://cosmoshub.validator.network:443"
+      GAIAD_STATESYNC_RPC_SERVERS: "https://cosmos-rpc.polkachu.com:443,https://rpc-cosmoshub.blockapsis.com:443,https://cosmoshub.validator.network:443"
       GOPATH: /go
 
     strategy:
