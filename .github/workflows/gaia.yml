@@ -1,0 +1,52 @@
+# This workflow builds and pushes a new version of the build container image
+# when the tools directory changes on master. Edit tools/Dockerfile.
+#
+# This workflow does not push a new image until it is merged, so tests that
+# depend on changes in this image will not pass until this workflow succeeds.
+# For that reason, changes here should be done in a separate PR in advance of
+# work that depends on them.
+
+name: State Sync Gaia
+on:
+  pull_request:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: ghcr.io/faddat/gaia
+    continue-on-error: true
+    env:
+      INTERVAL: 1000
+      GAIAD_STATESYNC_ENABLE: true
+      GAIAD_P2P_MAX_NUM_OUTBOUND_PEERS: 200
+      GAIAD_P2P_SEEDS: "ade4d8bc8cbe014af6ebdf3cb7b1e9ad36f412c0@seeds.polkachu.com:14956"
+      GAIAD_STATESYNC_RPC_SERVERS: "https://cosmos-rpc.polkachu.com:443,https://rpc-cosmoshub.blockapsis.com:443,https://cosmoshub.validator.network:443"
+      GOPATH: /go
+
+    strategy:
+      matrix:
+        database: [pebbledb, goleveldb, mdbx]
+
+    steps:
+      - run: git config --global --add safe.directory /__w/tendermint/tm-db
+      - uses: actions/checkout@v3
+      - name: state sync gaia with ${{ matrix.database }}
+        run: |
+          cd ..
+          git clone https://github.com/cosmos/gaia --branch release/v7.0.x
+          cd gaia
+          go mod edit -replace github.com/tendermint/tm-db=../tm-db
+          go mod tidy
+          go install -ldflags '-w -s -X github.com/cosmos/cosmos-sdk/types.DBBackend=${{ matrix.database }}' -tags ${{ matrix.database }} ./...
+          export LATEST_HEIGHT=$(curl -s https://rpc-cosmoshub.blockapsis.com/block | jq -r .result.block.header.height);
+          export BLOCK_HEIGHT=$(($LATEST_HEIGHT-$INTERVAL)) 
+          export TRUST_HASH=$(curl -s "https://rpc-cosmoshub.blockapsis.com/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
+          export GAIAD_STATESYNC_TRUST_HEIGHT=$BLOCK_HEIGHT
+          export GAIAD_STATESYNC_TRUST_HASH=$TRUST_HASH
+          export PATH=$PATH:/go/bin
+          echo "TRUST HEIGHT: $BLOCK_HEIGHT"
+          echo "TRUST HASH: $TRUST_HASH"
+          gaiad init gaia-matrix
+          cp /genesis.json ~/.gaia/config/genesis.json
+          gaiad start --x-crisis-skip-assert-invariants --db_backend ${{ matrix.database }} --halt-height $((LATEST_HEIGHT+25))
