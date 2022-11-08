@@ -18,11 +18,13 @@ const (
 	//   - EXPERIMENTAL
 	//   - use pebble build tag (go build -tags pebbledb)
 	PebbleDBBackend BackendType = "pebbledb"
-  // MDBXBackend represents mdbx (uses mdbx)
+	// MDBXBackend represents mdbx (uses mdbx)
 	//   - EXPERIMENTAL
 	//   - use pebble build tag (go build -tags mdbx)
-
 	MDBXBackend BackendType = "mdbx"
+	// MemDBBackend represents in-memory key value store, which is mostly used
+	// for testing.
+	MemDBBackend BackendType = "memdb"
 )
 
 type dbCreator func(name string, dir string) (DB, error)
