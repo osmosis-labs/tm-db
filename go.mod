@@ -4,9 +4,13 @@ go 1.19
 
 require (
 	github.com/cockroachdb/pebble v0.0.0-20220726134658-7b78c71e4055
+	github.com/c2h5oh/datasize v0.0.0-20220606134207-859f65c6625b
+	github.com/gogo/protobuf v1.3.2
 	github.com/google/btree v1.1.2
 	github.com/stretchr/testify v1.8.0
 	github.com/syndtr/goleveldb v1.0.1-0.20200815110645-5c35d600f0ca
+	github.com/torquem-ch/mdbx-go v0.26.0
+	google.golang.org/grpc v1.48.0
 )
 
 require (
