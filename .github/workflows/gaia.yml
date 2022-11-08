@@ -39,9 +39,9 @@ jobs:
           go mod edit -replace github.com/tendermint/tm-db=../tm-db
           go mod tidy
           go install -ldflags '-w -s -X github.com/cosmos/cosmos-sdk/types.DBBackend=${{ matrix.database }}' -tags ${{ matrix.database }} ./...
-          export LATEST_HEIGHT=$(curl -s https://cosmoshub.validator.network/block | jq -r .result.block.header.height);
+          export LATEST_HEIGHT=$(curl -s https://rpc-cosmoshub.blockapsis.com/block | jq -r .result.block.header.height);
           export BLOCK_HEIGHT=$(($LATEST_HEIGHT-$INTERVAL)) 
-          export TRUST_HASH=$(curl -s "https://cosmoshub.validator.network/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
+          export TRUST_HASH=$(curl -s "https://rpc-cosmoshub.blockapsis.com/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
           export GAIAD_STATESYNC_TRUST_HEIGHT=$BLOCK_HEIGHT
           export GAIAD_STATESYNC_TRUST_HASH=$TRUST_HASH
           export PATH=$PATH:/go/bin
