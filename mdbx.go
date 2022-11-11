@@ -30,8 +30,8 @@ func NewMDBX(name string, dir string) (DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	env.SetGeometry(-1, -1, int(3*datasize.TB), int(2*datasize.GB), -1, int(DefaultPageSize()))
-	if err := env.Open(path, 0, 0644); err != nil {
+	err = env.SetGeometry(-1, -1, int(3*datasize.TB), int(2*datasize.GB), -1, int(DefaultPageSize()))
+	if err := env.Open(path, 0, 0o644); err != nil {
 		return nil, err
 	}
 	var dbi mdbx.DBI
