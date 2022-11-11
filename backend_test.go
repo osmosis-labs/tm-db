@@ -13,7 +13,7 @@ import (
 
 // Register a test backend for PrefixDB as well, with some unrelated junk data
 func init() {
-	// nolint: errcheck
+	//nolint: errcheck
 	registerDBCreator("prefixdb", func(name, dir string) (DB, error) {
 		mdb := NewMemDB()
 		mdb.Set([]byte("a"), []byte{1})
@@ -35,7 +35,7 @@ func cleanupDBDir(dir, name string) {
 
 func testBackendGetSetDelete(t *testing.T, backend BackendType) {
 	// Default
-	dirname, err := ioutil.TempDir("", fmt.Sprintf("test_backend_%s_", backend))
+	dirname, err := os.MkdirTemp("", fmt.Sprintf("test_backend_%s_", backend))
 	require.Nil(t, err)
 	db, err := NewDB("testdb", backend, dirname)
 	require.NoError(t, err)

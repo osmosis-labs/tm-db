@@ -30,10 +30,7 @@ linters:
 
 run:
   build-tags:
-    - cleveldb
-    - rocksdb
-    - badgerdb
-    - boltdb
+    - mdbx
 
 issues:
   exclude-rules:
